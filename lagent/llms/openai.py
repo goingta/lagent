@@ -284,9 +284,9 @@ class GPTAPI(BaseAPIModel):
                                 return
                         else:
                             choice = response['choices'][0]
+                            yield choice['delta']['content']
                             if choice['finish_reason'] == 'stop':
                                 return
-                            yield choice['delta']['content']
                     except Exception as exc:
                         print(
                             f'response {decoded} lead to exception of {str(exc)}'
@@ -413,7 +413,7 @@ class GPTAPI(BaseAPIModel):
             }
             if json_mode:
                 data['response_format'] = {'type': 'json_object'}
-        elif model_type.lower().startswith('internlm'):
+        elif model_type.lower().startswith('internlm') or model_type.lower().startswith('glm-4'):
             data = {
                 'model': model_type,
                 'messages': messages,
